@@ -2,7 +2,9 @@ extern crate simplelog;
 extern crate winapi;
 
 use std::env;
+use std::path::Path;
 use std::fs;
+use std::os::windows::fs as winfs;
 
 fn main() {
     let argv: Vec<String> = env::args().collect();
@@ -24,7 +26,11 @@ fn main() {
                     // Symbolic Link
                     "--soft" =>
                     {
-
+                        match winfs::symlink_file(Path::new(&argv[2]), Path::new(&argv[3]))
+                        {
+                            Ok(_) => println!("Symbolic Link created at {}, with destination {}", &argv[2], &argv[3]),
+                            Err(_) => panic!("The given paths were not files or non-existent."),
+                        }
                     },
 
                     // Hard Link
@@ -54,6 +60,4 @@ fn main() {
         },
         None => panic!("Could not get home directory, aborting."),
     }
-
-    println!("Hello, world!");
 }
