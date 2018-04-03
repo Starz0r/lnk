@@ -12,7 +12,7 @@ A way to create symbolic, junctions, and hard links without using the CMD Shell.
 
 ##### Hard Link (files only)
 ```
---soft <Destination> <Source>
+--hard <Destination> <Source>
 ```
 
 ##### Junction (soft linking for directories)
