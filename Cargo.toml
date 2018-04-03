@@ -1,0 +1,12 @@
+[package]
+name = "mklink"
+version = "0.1.0"
+authors = ["Starz0r <starz0rdesign@gmail.com>"]
+
+[dependencies]
+simplelog = "0.5.1"
+winapi = { version = "0.3.4", features = ["winbase"] }
+
+[features]
+default = ["std"]
+std = ["winapi/std"]
