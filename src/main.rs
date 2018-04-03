@@ -64,7 +64,7 @@ fn main() {
                     .create(true)
                     .open(p)
                     .unwrap();
-                writeln!(file, "Link Type: {} ~~~~~~~~ Working Directory: {:?} ~~~~~~~~ Source: {} ~~~~~~~~ Destination: {}", &argv[1], env::current_dir().unwrap(), &argv[2], &argv[3]);
+                writeln!(file, "Link Type: {} ~~~~~~~~ Working Directory: {:?} ~~~~~~~~ Source: {} ~~~~~~~~ Destination: {}", &argv[1], env::current_dir().unwrap(), &argv[3], &argv[2]);
             }
             else
             {
