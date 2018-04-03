@@ -54,7 +54,10 @@ fn main() {
                     },
 
                     // Invalid Link
-                    _ => {},
+                    _ =>
+                    {
+                        panic!("Link type was not specified or invalid, aborting.")
+                    },
                 }
             }
             else
