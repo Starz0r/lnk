@@ -1,10 +1,12 @@
-extern crate simplelog;
 extern crate winapi;
 
 use std::env;
+use std::path::PathBuf;
 use std::path::Path;
 use std::fs;
+use std::fs::OpenOptions;
 use std::os::windows::fs as winfs;
+use std::io::Write;
 
 fn main() {
     let argv: Vec<String> = env::args().collect();
@@ -12,7 +14,7 @@ fn main() {
 
     match path
     {
-        Some(p) =>
+        Some(mut p) =>
         {
             if (argv.len() == 4)
             {
@@ -54,6 +56,16 @@ fn main() {
                         panic!("Link type was not specified or invalid, aborting.")
                     },
                 }
+
+                // Keep a record of all symlinked locations
+                p.push(".mklink");
+                println!("{:?}", &p);
+                let mut file = OpenOptions::new()
+                    .append(true)
+                    .create(true)
+                    .open(p)
+                    .unwrap();
+                writeln!(file, "Link Type: {} ~~~~~~~~ Working Directory: {:?} ~~~~~~~~ Source: {} ~~~~~~~~ Destination: {}", &argv[1], env::current_dir().unwrap(), &argv[2], &argv[3]);
             }
             else
             {
