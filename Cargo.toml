@@ -2,3 +2,7 @@
 name = "mklink"
 version = "1.0.0"
 authors = ["Starz0r <starz0rdesign@gmail.com>"]
+
+[profile.release]
+lto = true
+panic = 'abort'
