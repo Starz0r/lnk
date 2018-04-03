@@ -16,19 +16,14 @@ fn main() {
         {
             if (argv.len() == 4)
             {
-                println!("Argument 1: {}", &argv[0]);
-                println!("Argument 2: {}", &argv[1]);
-                println!("Argument 3: {}", &argv[2]);
-                println!("Argument 4: {}", &argv[3]);
-
                 match argv[1].to_lowercase().as_str()
                 {
                     // Symbolic Link
                     "--soft" =>
                     {
-                        match winfs::symlink_file(Path::new(&argv[3]), Path::new(&argv[2]))
+                        match winfs::symlink_file(Path::new(&argv[2]), Path::new(&argv[3]))
                         {
-                            Ok(_) => println!("Symbolic Link created at {}, with destination {}", &argv[3], &argv[2]),
+                            Ok(_) => println!("Symbolic Link created at {}, with destination {}", &argv[2], &argv[3]),
                             Err(_) => panic!("The given paths were not files or non-existent."),
                         }
                     },
@@ -36,9 +31,9 @@ fn main() {
                     // Hard Link
                     "--hard" =>
                     {
-                        match fs::hard_link(&argv[3], &argv[2])
+                        match fs::hard_link(&argv[2], &argv[3])
                         {
-                            Ok(_) => println!("Hard Link created at {}, with destination {}", &argv[3], &argv[2]),
+                            Ok(_) => println!("Hard Link created at {}, with destination {}", &argv[2], &argv[3]),
                             Err(_) => panic!("The given paths were not files or non-existent."),
                         }
                     },
@@ -46,11 +41,11 @@ fn main() {
                     // Soft Link
                     "--junction" =>
                     {
-                        match winfs::symlink_dir(Path::new(&argv[3]), Path::new(&argv[2]))
-                            {
-                                Ok(_) => println!("Junction created at {}, with destination {}", &argv[3], &argv[2]),
+                        match winfs::symlink_dir(Path::new(&argv[2]), Path::new(&argv[3]))
+                        {
+                                Ok(_) => println!("Junction created at {}, with destination {}", &argv[2], &argv[3]),
                                 Err(_) => panic!("The given paths were not directories or were already existing."),
-                            }
+                        }
                     },
 
                     // Invalid Link
