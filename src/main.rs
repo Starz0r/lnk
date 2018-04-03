@@ -1,7 +1,4 @@
-extern crate winapi;
-
 use std::env;
-use std::path::PathBuf;
 use std::path::Path;
 use std::fs;
 use std::fs::OpenOptions;
@@ -59,7 +56,6 @@ fn main() {
 
                 // Keep a record of all symlinked locations
                 p.push(".mklink");
-                println!("{:?}", &p);
                 let mut file = OpenOptions::new()
                     .append(true)
                     .create(true)
