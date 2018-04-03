@@ -26,9 +26,9 @@ fn main() {
                     // Symbolic Link
                     "--soft" =>
                     {
-                        match winfs::symlink_file(Path::new(&argv[2]), Path::new(&argv[3]))
+                        match winfs::symlink_file(Path::new(&argv[3]), Path::new(&argv[2]))
                         {
-                            Ok(_) => println!("Symbolic Link created at {}, with destination {}", &argv[2], &argv[3]),
+                            Ok(_) => println!("Symbolic Link created at {}, with destination {}", &argv[3], &argv[2]),
                             Err(_) => panic!("The given paths were not files or non-existent."),
                         }
                     },
@@ -36,9 +36,9 @@ fn main() {
                     // Hard Link
                     "--hard" =>
                     {
-                        match fs::hard_link(&argv[2], &argv[3])
+                        match fs::hard_link(&argv[3], &argv[2])
                         {
-                            Ok(_) => println!("Hard Link created at {}, with destination {}", &argv[2], &argv[3]),
+                            Ok(_) => println!("Hard Link created at {}, with destination {}", &argv[3], &argv[2]),
                             Err(_) => panic!("The given paths were not files or non-existent."),
                         }
                     },
@@ -46,7 +46,11 @@ fn main() {
                     // Soft Link
                     "--junction" =>
                     {
-
+                        match winfs::symlink_dir(Path::new(&argv[3]), Path::new(&argv[2]))
+                            {
+                                Ok(_) => println!("Junction created at {}, with destination {}", &argv[3], &argv[2]),
+                                Err(_) => panic!("The given paths were not directories or were already existing."),
+                            }
                     },
 
                     // Invalid Link
