@@ -1,6 +1,3 @@
-#![feature(alloc_system)]
-extern crate alloc_system;
-
 use std::env;
 use std::path::Path;
 use std::fs;
