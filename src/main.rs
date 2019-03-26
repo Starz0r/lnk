@@ -10,6 +10,12 @@ fn main() {
     const FILEERR: &str = "The given paths were not files or non-existent.";
     const PATHERR: &str = "The given paths were not directories or were already existing.";
 
+    if (argv.len() == 3)
+    {
+        println!("Not enough arguments given");
+        exit(3)
+    }
+
     match env::home_dir()
     {
         Some(_) =>
