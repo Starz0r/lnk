@@ -1,5 +1,5 @@
 # mklink
-A way to create symbolic, junctions, and hard links without using the CMD Shell.
+This command line tool gives you the ability to create links or junctions in your filesystem, without the need to open a Command Prompt shell to invoke it.
 
 ![](https://img.shields.io/github/license/Starz0r/mklink.svg?style=flat-square) ![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/starz0r/mklink.svg?style=flat-square)
 
