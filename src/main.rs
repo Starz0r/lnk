@@ -1,9 +1,7 @@
 use std::env;
 use std::path::Path;
 use std::fs;
-use std::fs::OpenOptions;
 use std::os::windows::fs as winfs;
-use std::io::Write;
 
 fn main() {
     let argv: Vec<String> = env::args().collect();
@@ -53,15 +51,6 @@ fn main() {
                         panic!("Link type was not specified or invalid, aborting.")
                     },
                 }
-
-                // Keep a record of all symlinked locations
-                p.push(".mklink");
-                let mut file = OpenOptions::new()
-                    .append(true)
-                    .create(true)
-                    .open(p)
-                    .unwrap();
-                writeln!(file, "Link Type: {} ~~~~~~~~ Working Directory: {:?} ~~~~~~~~ Source: {} ~~~~~~~~ Destination: {}", &argv[1], env::current_dir().unwrap(), &argv[3], &argv[2]);
             }
             else
             {
