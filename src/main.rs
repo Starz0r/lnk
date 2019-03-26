@@ -5,9 +5,8 @@ use std::os::windows::fs as winfs;
 
 fn main() {
     let argv: Vec<String> = env::args().collect();
-    let path = env::home_dir();
 
-    match path
+    match env::home_dir()
     {
         Some(mut p) =>
         {
