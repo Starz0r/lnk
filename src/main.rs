@@ -8,7 +8,7 @@ fn main() {
 
     match env::home_dir()
     {
-        Some(mut p) =>
+        Some(_) =>
         {
             if (argv.len() == 4)
             {
