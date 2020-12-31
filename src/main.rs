@@ -1,87 +1,78 @@
 use std::env;
-use std::path::Path;
 use std::fs;
 use std::os::windows::fs as winfs;
-use std::process::{exit};
+use std::path::{Path, PathBuf};
+use std::process::exit;
+
+use structopt::StructOpt;
+
+#[derive(StructOpt, Debug)]
+#[structopt(name = "mklink")]
+struct CliOpts {
+    #[structopt(short = "o", long = "target")]
+    src: PathBuf,
+
+    #[structopt(short = "t", long = "link")]
+    dst: PathBuf,
+
+    #[structopt(short = "j", long = "junction")]
+    soft: bool,
+
+    #[structopt(short, long)]
+    hard: bool,
+
+    #[structopt(short = "d", long = "directory")]
+    symbolic: bool,
+}
 
 fn main() {
-    let argv: Vec<String> = env::args().collect();
+    let argv = CliOpts::from_args();
 
     const FILEERR: &str = "The given paths were not files or non-existent.";
     const PATHERR: &str = "The given paths were not directories or were already existing.";
 
-    match env::home_dir()
-    {
-        Some(_) =>
-        {
-            if (argv.len() == 3)
-            {
-                println!("Not enough arguments given");
-                exit(3)
-            }
-            else if (argv.len() == 4)
-            {
-                match argv[1].to_lowercase().as_str()
-                {
-                    // Symbolic Link
-                    "--soft" =>
-                    {
-                        match winfs::symlink_file(Path::new(&argv[3]), Path::new(&argv[2]))
-                        {
-                            Ok(_) => println!("Symbolic Link created at destination {}, with source path {}", &argv[3], &argv[2]),
-                            Err(_) =>
-                            {
-                                println!("{}", FILEERR);
-                                exit(2)
-                            },
-                        }
-                    },
+    let cmd = (argv.soft as u8 * 1) + (argv.hard as u8 * 4) + (argv.symbolic as u8 * 8);
 
-                    // Hard Link
-                    "--hard" =>
-                    {
-                        match fs::hard_link(&argv[3], &argv[2])
-                        {
-                            Ok(_) => println!("Hard Link created at destination {}, with source path {}", &argv[3], &argv[2]),
-                            Err(_) =>
-                            {
-                                println!("{}", FILEERR);
-                                exit(2)
-                            },
-                        }
-                    },
-
-                    // Soft Link
-                    "--junction" =>
-                    {
-                        match winfs::symlink_dir(Path::new(&argv[3]), Path::new(&argv[2]))
-                        {
-                                Ok(_) => println!("Junction created at destination {}, with source path {}", &argv[3], &argv[2]),
-                                Err(_) =>
-                                {
-                                    println!("{}", PATHERR);
-                                    exit(2)
-                                },
-                        }
-                    },
-
-                    // Invalid Link
-                    _ =>
-                    {
-                        panic!("Link type was not specified or invalid, aborting.")
-                    },
-                }
-            }
-            else
-            {
-                panic!("Not enough arguments.");
+    match cmd {
+        // Symbolic Link
+        8 => match winfs::symlink_file(&argv.src, &argv.dst) {
+            Ok(_) => println!(
+                "Symbolic Link created at the destination {:?}, with the source path of {:?}",
+                argv.dst, argv.src
+            ),
+            Err(_) => {
+                println!("{}", FILEERR);
+                exit(2)
             }
         },
-        None =>
-        {
-            println!("Could not get home directory, aborting.");
-            exit(1)
+
+        // Hard Link
+        4 => match fs::hard_link(&argv.src, &argv.dst) {
+            Ok(_) => println!(
+                "Hard Link created at the destination {:?}, with the source path of {:?}",
+                argv.dst, argv.src
+            ),
+            Err(_) => {
+                println!("{}", FILEERR);
+                exit(2)
+            }
         },
+
+        // Soft Link
+        1 => match winfs::symlink_dir(&argv.src, &argv.dst) {
+            Ok(_) => println!(
+                "Junction created at the destination {:?}, with the source path of {:?}",
+                argv.dst, argv.src
+            ),
+            Err(_) => {
+                println!("{}", PATHERR);
+                exit(2)
+            }
+        },
+
+        // Invalid Link
+        _ => panic!("Multiple or no link type(s) were specified or invalid, aborting."),
     }
+
     exit(0)
 }

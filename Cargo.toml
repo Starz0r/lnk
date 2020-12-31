@@ -2,7 +2,7 @@
 name = "mklink"
 version = "1.0.0"
 authors = ["Starz0r <starz0r@starz0r.com>"]
+edition = "2018"
 
-[profile.release]
-lto = true
-panic = 'abort'
+[dependencies]
+structopt = "0.3.21"
