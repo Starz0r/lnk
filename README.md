@@ -1,25 +1,42 @@
 # mklink
-This command line tool gives you the ability to create links or junctions in your filesystem, without the need to open a Command Prompt shell to invoke it.
+This command line tool gives you the ability to create links or junctions in your filesystem, without the need to open a Command Prompt shell to invoke it. Windows only.
 
 ![](https://img.shields.io/github/license/Starz0r/mklink.svg?style=flat-square) ![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/starz0r/mklink.svg?style=flat-square)
 
 ---
 
-## Commands
+## Usage
 
-##### Soft Link (files only)
 ```
---soft <Destination> <Source>
+USAGE:  
+mklink.exe \[FLAGS\] --link <dst> --target <src>  
+  
+FLAGS:  
+-h, --hard  
+--help Prints help information  
+-j, --junction  
+-d, --directory  
+-V, --version Prints version information  
+  
+OPTIONS:  
+-t, --link <dst>  
+-o, --target <src>
 ```
 
-##### Hard Link (files only)
+## Example
+
+Link -> Target.
+
+##### File
 ```
---hard <Destination> <Source>
+$> bat > a.txt
+$> mklink --hard --link .\b.txt --target .\a.txt
 ```
 
-##### Junction (soft linking for directories)
+##### Directory
 ```
---junction <Destination> <Source>
+$> mkdir "foo"
+$> mklink --junction --link .\bar\ --target .\foo\
 ```
 
 ---
@@ -29,7 +46,7 @@ This command line tool gives you the ability to create links or junctions in you
 ##### Requirements
 ```
 Microsoft Windows Vista or higher
-Rust 1.26.0 or higher
+Rust 1.45.0 or higher
 Microsoft Visual Compiler or GNU Compatible Compiler
 Xargo or Cargo
 ```
