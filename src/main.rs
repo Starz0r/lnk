@@ -1,12 +1,6 @@
-use std::env;
-use std::error::Error;
-use std::fs;
-use std::os::windows::fs as winfs;
-use std::path::{Path, PathBuf};
-use std::process::exit;
+use std::{fs, os::windows::fs as winfs, path::PathBuf, process::exit};
 
-use owo_colors::OwoColorize;
-use structopt::StructOpt;
+use {owo_colors::OwoColorize, structopt::StructOpt};
 
 #[derive(StructOpt, Debug)]
 #[structopt(name = "mklink")]
