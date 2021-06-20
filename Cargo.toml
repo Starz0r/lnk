@@ -1,5 +1,5 @@
 [package]
-name = "mklink"
+name = "lnk"
 version = "1.0.0"
 authors = ["Starz0r <starz0r@starz0r.com>"]
 edition = "2018"

@@ -1,4 +1,4 @@
-# mklink
+# lnk
 This command line tool gives you the ability to create links or junctions in your filesystem, without the need to open a Command Prompt shell to invoke it. Windows only.
 
 ![](https://img.shields.io/github/license/Starz0r/mklink.svg?style=flat-square) ![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/starz0r/mklink.svg?style=flat-square)
@@ -9,17 +9,18 @@ This command line tool gives you the ability to create links or junctions in you
 
 ```
 USAGE:  
-mklink.exe \[FLAGS\] --link <dst> --target <src>  
-  
+lnk.exe [FLAGS] --link <src> --target <dst>
+
 FLAGS:  
--h, --hard  
---help Prints help information  
--j, --junction  
--d, --directory  
--V, --version Prints version information  
-  
+-h, --hard
+--help         Prints help information
+-j, --junction
+-s, --soft
+-d, --directory
+-V, --version      Prints version information
+
 OPTIONS:  
--t, --link <dst>  
+-t, --link <dst>
 -o, --target <src>
 ```
 
@@ -30,13 +31,13 @@ Link -> Target.
 ##### File
 ```
 $> bat > a.txt
-$> mklink --hard --link .\b.txt --target .\a.txt
+$> lnk --hard --link .\b.txt --target .\a.txt
 ```
 
 ##### Directory
 ```
 $> mkdir "foo"
-$> mklink --junction --link .\bar\ --target .\foo\
+$> lnk --junction --link .\bar\ --target .\foo\
 ```
 
 ---
