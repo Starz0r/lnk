@@ -5,7 +5,6 @@ use std::os::windows::fs as winfs;
 use std::path::{Path, PathBuf};
 use std::process::exit;
 
-use color_eyre::eyre::{eyre, Result};
 use owo_colors::OwoColorize;
 use structopt::StructOpt;
 
@@ -30,56 +29,56 @@ struct CliOpts {
 
 const FILE_ERR: &str = "File was a path or non-existent.";
 const PATH_ERR: &str = "Paths were not directories or were already existing.";
+const LINK_TYPE_ERR: &str = "Multiple or no link type(s) were specified or invalid, aborting.";
 
-fn main() -> Result<(), Box<dyn Error>> {
-    color_eyre::install()?;
-
+fn main() {
     let argv = CliOpts::from_args();
 
     let cmd = (argv.soft as u8 * 1) + (argv.hard as u8 * 4) + (argv.symbolic as u8 * 8);
 
     match cmd {
         // Symbolic Link
-        8 => {
-            winfs::symlink_file(&argv.src, &argv.dst).or_else(|_| Err(eyre!("{}", FILE_ERR)))?;
-            println!(
+        8 => match winfs::symlink_file(&argv.src, &argv.dst) {
+            Ok(_) => println!(
                 "{} {:?}, {} {:?}",
                 "Symbolic Link created at the destination".bright_green(),
                 argv.dst.bright_green(),
                 "with the source path of".bright_green(),
                 argv.src.bright_green()
-            )
-        }
+            ),
+            Err(_) => abort(FILE_ERR, 2),
+        },
 
         // Hard Link
-        4 => {
-            fs::hard_link(&argv.src, &argv.dst).or_else(|_| Err(eyre!("{}", FILE_ERR)))?;
-            println!(
+        4 => match fs::hard_link(&argv.src, &argv.dst) {
+            Ok(_) => println!(
                 "{} {:?}, {} {:?}",
                 "Hard Link created at the destination".bright_green(),
                 argv.dst.bright_green(),
                 "with the source path of".bright_green(),
                 argv.src.bright_green()
-            )
-        }
+            ),
+            Err(_) => abort(FILE_ERR, 3),
+        },
 
         // Soft Link
-        1 => {
-            winfs::symlink_dir(&argv.src, &argv.dst).or_else(|_| Err(eyre!("{}", PATH_ERR)))?;
-            println!(
+        1 => match winfs::symlink_dir(&argv.src, &argv.dst) {
+            Ok(_) => println!(
                 "{} {:?}, {} {:?}",
-                "Junction created at the destination".bright_green(),
+                "Soft Link created at the destination".bright_green(),
                 argv.dst.bright_green(),
                 "with the source path of".bright_green(),
                 argv.src.bright_green()
-            )
-        }
+            ),
+            Err(_) => abort(PATH_ERR, 4),
+        },
 
         // Invalid Link
-        _ => Err(eyre!(
-            "Multiple or no link type(s) were specified or invalid, aborting."
-        ))?,
+        _ => abort(LINK_TYPE_ERR, 4),
     }
+}
 
-    Ok(())
+fn abort(e: &str, c: i32) -> ! {
+    println!("{}", e.bright_red());
+    exit(c);
 }

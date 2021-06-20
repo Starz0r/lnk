@@ -6,5 +6,7 @@ edition = "2018"
 
 [dependencies]
 structopt = "0.3.21"
-color-eyre = "0.5.8"
 owo-colors = "1.2.0"
+
+[dev-dependencies]
+winapi = { version = "0.3.9", features = ["std"] }
